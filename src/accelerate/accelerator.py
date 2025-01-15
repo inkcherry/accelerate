@@ -1661,7 +1661,7 @@ class Accelerator:
         deepspeed_plugin = self.deepspeed_plugin
 
         is_dataloader_present = any(isinstance(obj, torch.utils.data.DataLoader) for obj in args)
-        tp_size = self.deepspeed_plugin.deepspeed_config["zero_optimization"].get("autotp_size", 0)
+        tp_size = self.deepspeed_plugin.deepspeed_config["tensor_parallel"].get("autotp_size", 0)
         if tp_size > 1:
             # the following two variables will affect the shard distribution of the dataset.
             # like, BatchSamplerShard, DataLoaderShard, IterableDatasetShard
@@ -3386,7 +3386,7 @@ class Accelerator:
                 or self.deepspeed_config["zero_optimization"].get("autotp_size", 0) > 0
             ):
                 if model.zero_gather_16bit_weights_on_model_save():
-                    state_dict = model._zero3_consolidated_16bit_state_dict()
+                    state_dict = model._consolidated_16bit_state_dict()
                 else:
                     raise ValueError(
                         "Cannot get 16bit model weights because `stage3_gather_16bit_weights_on_model_save` in DeepSpeed config is False. "
