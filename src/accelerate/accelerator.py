@@ -3383,7 +3383,7 @@ class Accelerator:
         if self.distributed_type == DistributedType.DEEPSPEED:
             if (
                 self.deepspeed_config["zero_optimization"]["stage"] == 3
-                or self.deepspeed_config["zero_optimization"].get("autotp_size", 0) > 0
+                or self.deepspeed_config["tensor_parallel"].get("autotp_size", 0) > 1
             ):
                 if model.zero_gather_16bit_weights_on_model_save():
                     state_dict = model._consolidated_16bit_state_dict()
